@@ -1,29 +1,23 @@
+/***
+ * Adds (or removes if existing) the style tag containing the background colors and the 
+ * div tag containing the HTML tag being hovered over.
+ *
+ */
 if (document.getElementById("RemoveCSS-Style-ID") == null) {
     var css = '*{background-color:rgba(255,0,0,0.2)}* *{background-color:rgba(0,255,0,0.2)}* * *{background-color:rgba(0,0,255,0.2)}* * * *{background-color:rgba(255,0,255,0.2)}* * * * *{background-color:rgba(0,255,255,0.2)}* * * * * *{background-color:rgba(255,255,0,0.2)}',
         head = document.head || document.getElementsByTagName('head')[0],
         style = document.createElement('style'),
         oldElement = null,
-        hoverDescription = "Hover over an element to focus on it.";
+        hoverDescription = "Hover over an element to focus on it.",
+        hoverElement = document.createElement("div"),
+        body = document.getElementsByTagName('body')[0];
 
     style.type = 'text/css';
     style.id = "RemoveCSS-Style-ID";
-
-    if (style.styleSheet){
-        style.styleSheet.cssText = css;
-    } else {
-        style.appendChild(document.createTextNode(css));
-    }
-    head.appendChild(style);
-
-
     // Create HTML box for hover description
-    var hoverElement = document.createElement("div");
-    var body = document.getElementsByTagName('body')[0];
     body.appendChild(hoverElement);
     hoverElement.id = "Rundown-HTML-Hover-Element";
-
     hoverElement.innerHTML = hoverDescription;
-
     hoverElement.style.textAlign = "center";
     hoverElement.style.margin = "0 auto";
     hoverElement.style.padding = "0.5em 3em";
@@ -34,8 +28,14 @@ if (document.getElementById("RemoveCSS-Style-ID") == null) {
     hoverElement.style.position = "fixed";
     hoverElement.style.zIndex = "1000";
 
+    (style.styleSheet) ? style.styleSheet.cssText = css : style.appendChild(document.createTextNode(css));
+
+    head.appendChild(style);
 
 
+    /**
+     * On mouse move find the element being hovered over and get it's TagName, ID, and Classes.
+     */
     document.addEventListener('mousemove', function (e) {
         var x = e.clientX,
             y = e.clientY,
@@ -59,7 +59,6 @@ if (document.getElementById("RemoveCSS-Style-ID") == null) {
                     }
                 }
             }
-
             hoverElement.innerHTML = hoverDescription;
         }
 
